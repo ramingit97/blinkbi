@@ -8,9 +8,4 @@ Build docker compose:
 
 ```bash
 docker compose build
-
-
-Up docker compose:
-
-```bash
 docker compose up -d
