@@ -1,10 +1,16 @@
 # Project Name
 
-A brief description of what this project does and who it's for.
+Express project with Typeorm , inversify, Ts with auth
 
 ## Installation
 
-Clone the repository:
+Build docker compose:
 
 ```bash
-git clone https://github.com/username/repository-name.git
+docker compose build
+
+
+Up docker compose:
+
+```bash
+docker compose up -d
