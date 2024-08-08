@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      TYPEORM_TYPE: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  # rabbitmq:
+  #   image: rabbitmq:management
+  #   ports:
+  #     - "5673:5672"
+  #     - "15673:15672" # Management UI
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
+  #   volumes:
+  #     - rabbitmq_data:/var/lib/rabbitmq
+
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      # - rabbitmq
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@postgres:5432/mydatabase
+      TYPEORM_HOST: postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    
+
+volumes:
+  postgres_data:
+  # rabbitmq_data:
