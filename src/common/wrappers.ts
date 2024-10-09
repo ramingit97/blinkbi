@@ -7,7 +7,7 @@ export const asyncWrapper = (action: RequestHandler) => {
         try {
             return await action(req, res, next);
         } catch (error:any) {
-            console.log(error,"error");
+            console.log(error,"error2222222");
             if(error instanceof HttpError){
                 return res.status(error.statusCode).json({error:error.message})
             }

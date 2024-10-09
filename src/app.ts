@@ -82,17 +82,26 @@ export class App {
                 };
 
                 callBack  = asyncWrapper(callBack);
-                if(methodMidd.middlewares?.length){
+                if (methodMidd.middlewares?.length) {
                     handlers = [...classMiddlewares.middlewares];
                 }
                 
-                let handlers3:Handler[] =  handlers.map(a=>{
-                    return a.execute.bind(a);
-                })
+                let handlers3: any[] = handlers.map(handler => {
+                    // Если это объект, реализующий интерфейс IMiddleware (т.е. есть метод execute)
+                    if (typeof handler.execute === 'function') {
+                        return handler.execute.bind(handler);
+                    }
+                    return handler;
+                });
                 
-
-                if(methodMidd.middlewares?.length){
-                     handlers3 = [...handlers3,...methodMidd.middlewares]
+                if (methodMidd.middlewares?.length) {
+                    console.log('methodMidd', methodMidd);
+                    handlers3 = [...handlers3, ...methodMidd.middlewares.map(handler => {
+                        if (typeof handler.execute === 'function') {
+                            return handler.execute.bind(handler);
+                        }
+                        return handler;
+                    })];
                 }
 
 
@@ -125,6 +134,7 @@ export class App {
         this.app.use(cookieParser())
 
         this.useRoutes(controllers);
+        
 
         this.server = this.app.listen(this.port);
         this.logger.log(`Server run on port : ${this.port}`)

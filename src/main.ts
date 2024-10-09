@@ -7,9 +7,9 @@ import { TYPES } from "./types";
 import { IExceptionFilters } from "./errors/exception.filter.interface";
 import { IConfigService } from "./config/config.service.interface";
 import { ConfigService } from "./config/config.service";
-import userModule from "./users/user.module";
-import postModule  from "./post/post.module";
-import tokensModule from "./tokens/tokens.module";
+import customersModule from "./modules/customers/customers.module";
+import { DataSource } from "typeorm";
+import { dataSource } from "./ormconfig";
 
 export interface IBootstrapRun{
     appContainer:Container,
@@ -23,17 +23,15 @@ function bootstrap(){
     appContainer.bind<IExceptionFilters>(TYPES.ExceptionFilter).to(ExceptionFilters)
     appContainer.bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope()   
     appContainer.bind<App>(TYPES.Application).to(App)
+    appContainer.bind<DataSource>(DataSource).toConstantValue(dataSource);
+
     const app = appContainer.get<App>(TYPES.Application)
 
     const controllers = [
-        ...userModule.controllers,
-        ...postModule.controllers
+        ...customersModule.controllers
     ];
-
     // here we load custom modules
-    appContainer.load(userModule.module)
-    appContainer.load(postModule.module);
-    appContainer.load(tokensModule.module);
+    appContainer.load(customersModule.module);
     
     //end 
 

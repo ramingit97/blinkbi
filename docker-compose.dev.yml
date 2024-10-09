@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    networks:
+      - blinkBi-network
+    environment:
+      MONGO_INITDB_DATABASE: mydatabase
+      MONGO_INITDB_ROOT_USERNAME: myuser
+      MONGO_INITDB_ROOT_PASSWORD: mypassword
+    # ports:
+      # - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - blinkBi-network  
+    depends_on:
+      - mongo
+    environment:
+      DATABASE_URL: mongodb://myuser:mypassword@mongo:27017/mydatabase
+      TYPEORM_HOST: mongo
+      TYPEORM_PORT: 27017
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+
+volumes:
+  mongo_data:
+networks:
+  blinkBi-network:

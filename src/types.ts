@@ -10,4 +10,8 @@ export const TYPES = {
     ConfigService: Symbol.for("ConfigService"),
     PostController:Symbol.for("PostController"),
     RegisterController:Symbol.for("RegisterController"),
+
+    CustomerController:Symbol.for("CustomerController"),
+    CustomerService:Symbol.for("CustomerService"),
+    CustomerRepo:Symbol.for("CustomerRepo"),
 }
