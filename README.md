@@ -1,6 +1,6 @@
 # Project Name
 
-Express project with Typeorm , inversify, Ts
+Express project with Mongodb,Typeorm ,inversify, Ts
 
 ## Installation
 
