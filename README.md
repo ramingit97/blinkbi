@@ -1,6 +1,6 @@
 # Project Name
 
-Express project with Typeorm , inversify, Ts with auth
+Express project with Typeorm , inversify, Ts
 
 ## Installation
 
