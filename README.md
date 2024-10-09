@@ -7,5 +7,5 @@ Express project with Typeorm , inversify, Ts with auth
 Build docker compose:
 
 ```bash
-docker compose build
-docker compose up -d
+docker compose -f docker-compose.dev.yml build
+docker compose -f docker-compose.dev.yml up
