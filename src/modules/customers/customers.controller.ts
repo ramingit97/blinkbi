@@ -11,6 +11,7 @@ import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { ValidateMiddleware } from "../../common/validate.middleware";
 import { Middleware } from "../../utils/middleware.decorator";
 import { TransferCustomerDto } from "./dto/transfer-customer.dto";
+import { UpdateCustomerBalanceDto } from "./dto/balanceupdate-customer.dto";
 
 @injectable()
 @Controller("/customers")
@@ -39,6 +40,29 @@ export class CustomerController extends BaseController{
     @Middleware([new ValidateMiddleware(CreateCustomerDto)])
     async create({body}:Request<{},{},CreateCustomerDto>,res:Response,next:NextFunction){
         const result = await this.service.createCustomer(body);
+        return ({
+            message:"Customer created successfully",
+            data:result
+        });
+    }
+
+
+    @Post("/topUp")
+    @Middleware([new ValidateMiddleware(UpdateCustomerBalanceDto)])
+    async topUp({body}:Request<{},{},UpdateCustomerBalanceDto>,res:Response,next:NextFunction){
+        const {gsm_number,balance} = body
+        const result = await this.service.topUp(gsm_number,balance);
+        return ({
+            message:"Customer created successfully",
+            data:result
+        });
+    }
+
+    @Post("/refund")
+    @Middleware([new ValidateMiddleware(UpdateCustomerBalanceDto)])
+    async refund({body}:Request<{},{},UpdateCustomerBalanceDto>,res:Response,next:NextFunction){
+        const {gsm_number,balance} = body
+        const result = await this.service.refund(gsm_number,balance);
         return ({
             message:"Customer created successfully",
             data:result

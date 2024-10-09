@@ -12,8 +12,6 @@ export class CustomerRepository{
       // Получаем репозиторий с помощью getRepository
       this.repo = getRepository(CustomerEntity);
     }
-
-
     async createCustomer(user:CustomerEntity){
         let findCustomerWithGsmNumber = await this.repo.findOne({
             where:{gsm_number:user.gsm_number}
@@ -29,10 +27,40 @@ export class CustomerRepository{
         return await this.repo.find();
     }
 
-    async findByEmail(email:string){
-
+    async topUp(gsm_number:number,amount:number){
+        let findCustomerWithGsmNumber = await this.findById(gsm_number);
+        if(!findCustomerWithGsmNumber){
+            throw new HttpError(403,`Customer with gsm number ${gsm_number} not found`)
+        }
+        return this.repo.update({gsm_number},{
+            balance:findCustomerWithGsmNumber.balance + amount
+        });
     }
 
+    async refund(gsm_number:number,amount:number){
+        let findCustomerWithGsmNumber = await this.findById(gsm_number);
+        if(!findCustomerWithGsmNumber){
+            throw new HttpError(403,`Customer with gsm number ${gsm_number} not found`)
+        }
+
+        if(findCustomerWithGsmNumber.balance < amount){
+            throw new HttpError(403,`Unsifficent balance : customer ${findCustomerWithGsmNumber.name}`)
+        }
+
+        return this.repo.update({gsm_number},{
+            balance:findCustomerWithGsmNumber.balance - amount
+        });
+    }
+
+    async updateOne(gsm_number:number,data:any){
+        let findCustomerWithGsmNumber = await this.repo.findOne({
+            where:{gsm_number}
+        })
+        if(!findCustomerWithGsmNumber){
+            throw new HttpError(403,`Customer with gsm number ${gsm_number} not found`)
+        }
+        return this.repo.update({gsm_number},data);
+    }
 
     async findById(gsm_number:number):Promise<CustomerEntity|null>{
         return await this.repo.findOne({where:{gsm_number}});

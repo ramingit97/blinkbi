@@ -25,6 +25,17 @@ export class CustomerService {
         console.log("user",user);
         return user;
     }
+    async topUp(gsm_number:number,amount:number){
+        const user = await this.repo.topUp(gsm_number,amount);
+        console.log("user",user);
+        return user;
+    }
+
+    async refund(gsm_number:number,amount:number){
+        const user = await this.repo.refund(gsm_number,amount);
+        console.log("user",user);
+        return user;
+    }
 
 
     async transfer(gsm_number1:number,gsm_number2:number,amount:number){
